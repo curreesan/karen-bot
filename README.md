@@ -2,6 +2,11 @@
 
 Karen is an intelligent Discord moderation system that uses AI to detect and act on toxic, abusive, or harmful messages in real time. It pairs an LLM-driven moderation engine with a full web dashboard so server admins can monitor activity, track repeat offenders, and review moderation history.
 
+🔗 **Live Dashboard:** [karen-bot-client.vercel.app](https://karen-bot-client.vercel.app)
+🔗 **Live API:** [karen-bot-server.onrender.com](https://karen-bot-server.onrender.com)
+
+> Note: The Discord bot's AI moderation runs on a local LLM (Ollama + Llama 3.2), so live message moderation is only active when the bot is running locally. The dashboard and API are fully live and browsable at all times.
+
 ## Overview
 
 Most Discord moderation bots rely on keyword blacklists, which are easy to bypass and miss context entirely. Karen instead uses a large language model to analyze each message for intent and context, classifying it by category (hate speech, harassment, spam, NSFW) and severity (low, medium, high) before deciding how to respond — ignore, flag for a human moderator, or delete and warn.
@@ -36,6 +41,7 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 - PostgreSQL (hosted on Neon)
 - Drizzle ORM
 - Discord OAuth 2.0 + JWT authentication
+- Deployed on Render
 
 **Frontend**
 
@@ -43,14 +49,15 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 - React Router
 - Context API for auth state
 - Plain CSS, organized per-page
+- Deployed on Vercel
 
 ## How It Works
 
 1. A message is sent in a connected Discord server.
 2. The bot sends the message content to a local Llama 3.2 model via Ollama, using a detailed moderation prompt covering categories, severity rules, and edge cases (coded language, bypass attempts, self-harm content, etc.).
 3. Based on the AI's classification, the bot takes action: delete + warn, flag to moderators, or silently log.
-4. The result is sent to the Express API and saved to PostgreSQL, along with an updated offense count for the user.
-5. Moderators log in to the dashboard via Discord OAuth and can view real-time stats, recent logs, and a list of repeat offenders.
+4. The result is sent to the live Express API and saved to PostgreSQL, along with an updated offense count for the user.
+5. Moderators log in to the dashboard via Discord OAuth and can view stats, recent logs, and a list of repeat offenders.
 
 ## Project Structure
 
