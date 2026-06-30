@@ -12,7 +12,7 @@ function Logs() {
   useEffect(() => {
     async function fetchLogs() {
       try {
-        const res = await fetch("http://localhost:3001/api/logs");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/logs`);
         const data = await res.json();
         setLogs(data);
       } catch (err) {

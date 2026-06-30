@@ -11,8 +11,8 @@ function Dashboard() {
     async function fetchData() {
       try {
         const [logsRes, offensesRes] = await Promise.all([
-          fetch("http://localhost:3001/api/logs"),
-          fetch("http://localhost:3001/api/logs/offenses"),
+          fetch(`${import.meta.env.VITE_API_URL}/api/logs`),
+          fetch(`${import.meta.env.VITE_API_URL}/api/logs/offenses`),
         ]);
         const logsData = await logsRes.json();
         const offensesData = await offensesRes.json();

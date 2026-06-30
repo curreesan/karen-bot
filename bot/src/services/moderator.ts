@@ -5,7 +5,7 @@ dotenv.config({ path: "../../.env" });
 
 const openai = new OpenAI({
   apiKey: "ollama",
-  baseURL: "http://localhost:11434/v1",
+  baseURL: process.env.OLLAMA_URL || "http://localhost:11434/v1",
 });
 
 export type ModerationResult = {
@@ -99,7 +99,7 @@ export async function analyzeMessage(
       },
     ],
     response_format: { type: "json_object" },
-    temperature: 0.1, // Low temperature for consistent, deterministic moderation
+    temperature: 0.1,
   });
 
   const raw = response.choices[0].message.content || "{}";

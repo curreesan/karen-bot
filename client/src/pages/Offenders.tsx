@@ -10,7 +10,9 @@ function Offenders() {
   useEffect(() => {
     async function fetchOffenses() {
       try {
-        const res = await fetch("http://localhost:3001/api/logs/offenses");
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/logs/offenses`,
+        );
         const data = await res.json();
         setOffenses(data);
       } catch (err) {

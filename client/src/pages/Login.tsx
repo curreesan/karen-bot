@@ -2,7 +2,7 @@ import "../styles/login.css";
 
 function Login() {
   function handleLogin() {
-    window.location.href = "http://localhost:3001/api/auth/login";
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/login`;
   }
 
   return (
