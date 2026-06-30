@@ -23,7 +23,7 @@ Every moderation decision is logged to a database, and repeat offenders are trac
   - Low severity → logged silently for review
 - **Offense tracking** — repeat violations are counted per user, with automatic flagging at a configurable threshold
 - **Discord OAuth login** for the moderator dashboard, so only authorized moderators can view logs
-- **Web dashboard** showing flagged message stats, recent moderation activity, and a leaderboard of top offenders
+- **Live-updating web dashboard** — stats, recent moderation activity, and a leaderboard of top offenders update in real time via WebSockets, no manual refresh needed
 - **Full moderation history** with search and filtering by category, severity, and username
 
 ## Tech Stack
@@ -41,6 +41,7 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 - PostgreSQL (hosted on Neon)
 - Drizzle ORM
 - Discord OAuth 2.0 + JWT authentication
+- Socket.io for real-time event broadcasting
 - Deployed on Render
 
 **Frontend**
@@ -48,6 +49,7 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 - React + TypeScript
 - React Router
 - Context API for auth state
+- Socket.io client for live dashboard updates
 - Plain CSS, organized per-page
 - Deployed on Vercel
 
@@ -57,13 +59,14 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 2. The bot sends the message content to a local Llama 3.2 model via Ollama, using a detailed moderation prompt covering categories, severity rules, and edge cases (coded language, bypass attempts, self-harm content, etc.).
 3. Based on the AI's classification, the bot takes action: delete + warn, flag to moderators, or silently log.
 4. The result is sent to the live Express API and saved to PostgreSQL, along with an updated offense count for the user.
-5. Moderators log in to the dashboard via Discord OAuth and can view stats, recent logs, and a list of repeat offenders.
+5. The server broadcasts the new moderation event over a WebSocket connection, so any moderator with the dashboard open sees it appear instantly — no page refresh required.
+6. Moderators log in to the dashboard via Discord OAuth and can view stats, recent logs, and a list of repeat offenders, all updating live as new events come in.
 
 ## Project Structure
 
 ```
 karen-bot/
 ├── bot/        # Discord bot + AI moderation logic
-├── server/     # Express API, MVC structure, database layer
-└── client/     # React moderator dashboard
+├── server/     # Express API, MVC structure, database layer, WebSocket server
+└── client/     # React moderator dashboard with live updates
 ```

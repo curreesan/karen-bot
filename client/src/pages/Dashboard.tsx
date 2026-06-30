@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ModerationLog, Offense } from "../types/moderation";
+import { socket } from "../lib/socket";
 import "../styles/dashboard.css";
 
 function Dashboard() {
@@ -25,6 +26,16 @@ function Dashboard() {
       }
     }
     fetchData();
+
+    function handleNewLog(newLog: ModerationLog) {
+      setLogs((prev) => [newLog, ...prev]);
+    }
+
+    socket.on("new_log", handleNewLog);
+
+    return () => {
+      socket.off("new_log", handleNewLog);
+    };
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -84,8 +95,8 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {logs.slice(0, 5).map((log) => (
-              <tr key={log.id}>
+            {logs.slice(0, 5).map((log, i) => (
+              <tr key={log.id ?? `temp-${i}`}>
                 <td>{log.username}</td>
                 <td>{log.message}</td>
                 <td>{log.category}</td>

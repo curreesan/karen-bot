@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { Offense } from "../types/moderation";
+import { socket } from "../lib/socket";
 import "../styles/offenders.css";
 
 function Offenders() {
@@ -7,22 +8,29 @@ function Offenders() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    async function fetchOffenses() {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/logs/offenses`,
-        );
-        const data = await res.json();
-        setOffenses(data);
-      } catch (err) {
-        console.error("Failed to fetch offenses:", err);
-      } finally {
-        setLoading(false);
-      }
+  const fetchOffenses = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/logs/offenses`,
+      );
+      const data = await res.json();
+      setOffenses(data);
+    } catch (err) {
+      console.error("Failed to fetch offenses:", err);
+    } finally {
+      setLoading(false);
     }
-    fetchOffenses();
   }, []);
+
+  useEffect(() => {
+    fetchOffenses();
+
+    socket.on("new_log", fetchOffenses);
+
+    return () => {
+      socket.off("new_log", fetchOffenses);
+    };
+  }, [fetchOffenses]);
 
   const filtered = offenses.filter((o) =>
     o.username.toLowerCase().includes(search.toLowerCase()),

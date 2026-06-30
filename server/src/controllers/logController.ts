@@ -5,6 +5,7 @@ import {
   getAllLogs,
   getAllOffenses,
 } from "../models/logModel";
+import { io } from "../index";
 
 async function createLog(req: Request, res: Response) {
   try {
@@ -38,6 +39,20 @@ async function createLog(req: Request, res: Response) {
     if (offenseCount >= 15) {
       console.log(`🚨 ${username} hit 15 offenses — flag for ban!`);
     }
+
+    // Broadcast new log to all connected dashboards
+    io.emit("new_log", {
+      discordId,
+      username,
+      message,
+      category,
+      severity,
+      reason,
+      action,
+      guildId,
+      channelId,
+      createdAt: new Date().toISOString(),
+    });
 
     res.json({ success: true, offenseCount });
   } catch (err) {

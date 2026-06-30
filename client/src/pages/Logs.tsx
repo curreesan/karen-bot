@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ModerationLog } from "../types/moderation";
+import { socket } from "../lib/socket";
 import "../styles/logs.css";
 
 function Logs() {
@@ -22,6 +23,16 @@ function Logs() {
       }
     }
     fetchLogs();
+
+    function handleNewLog(newLog: ModerationLog) {
+      setLogs((prev) => [newLog, ...prev]);
+    }
+
+    socket.on("new_log", handleNewLog);
+
+    return () => {
+      socket.off("new_log", handleNewLog);
+    };
   }, []);
 
   const filtered = logs.filter((log) => {
@@ -87,8 +98,8 @@ function Logs() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((log) => (
-              <tr key={log.id}>
+            {filtered.map((log, i) => (
+              <tr key={log.id ?? `temp-${i}`}>
                 <td>{log.username}</td>
                 <td className="message-cell">{log.message}</td>
                 <td>{log.category.replace("_", " ")}</td>
