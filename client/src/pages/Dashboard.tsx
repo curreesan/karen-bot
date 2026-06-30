@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ModerationLog, Offense } from "../types/moderation";
+import "../styles/dashboard.css";
 
 function Dashboard() {
   const [logs, setLogs] = useState<ModerationLog[]>([]);
@@ -42,41 +43,60 @@ function Dashboard() {
       : "N/A";
 
   return (
-    <div>
+    <div className="dashboard-page">
       <h1>Dashboard</h1>
 
-      <div>
-        <div>Total Flagged: {totalFlagged}</div>
-        <div>Total Deleted: {totalDeleted}</div>
-        <div>Total Offenders: {totalOffenders}</div>
-        <div>Top Category: {topCategory}</div>
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="label">Total Flagged</div>
+          <div className="value">{totalFlagged}</div>
+        </div>
+        <div className="stat-card">
+          <div className="label">Total Deleted</div>
+          <div className="value">{totalDeleted}</div>
+        </div>
+        <div className="stat-card">
+          <div className="label">Total Offenders</div>
+          <div className="value">{totalOffenders}</div>
+        </div>
+        <div className="stat-card">
+          <div className="label">Top Category</div>
+          <div
+            className="value"
+            style={{ fontSize: "1rem", paddingTop: "8px" }}
+          >
+            {topCategory}
+          </div>
+        </div>
       </div>
 
       <h2>Recent Logs</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Message</th>
-            <th>Category</th>
-            <th>Severity</th>
-            <th>Action</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {logs.slice(0, 5).map((log) => (
-            <tr key={log.id}>
-              <td>{log.username}</td>
-              <td>{log.message}</td>
-              <td>{log.category}</td>
-              <td>{log.severity}</td>
-              <td>{log.action}</td>
-              <td>{new Date(log.createdAt).toLocaleString()}</td>
+      <div className="recent-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Message</th>
+              <th>Category</th>
+              <th>Severity</th>
+              <th>Action</th>
+              <th>Time</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {logs.slice(0, 5).map((log) => (
+              <tr key={log.id}>
+                <td>{log.username}</td>
+                <td>{log.message}</td>
+                <td>{log.category}</td>
+                <td>{log.severity}</td>
+                <td>{log.action}</td>
+                <td>{new Date(log.createdAt).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <h2>Top Offenders</h2>
       <table>
@@ -91,7 +111,9 @@ function Dashboard() {
           {offenses.slice(0, 5).map((o) => (
             <tr key={o.id}>
               <td>{o.username}</td>
-              <td>{o.count}</td>
+              <td>
+                {o.count} {o.count >= 15 ? "🚨" : ""}
+              </td>
               <td>{new Date(o.lastOffenseAt).toLocaleString()}</td>
             </tr>
           ))}

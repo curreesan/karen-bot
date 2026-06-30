@@ -1,0 +1,36 @@
+.offenders-page {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.offenders-search {
+  margin-bottom: 16px;
+}
+
+.offenders-count {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.offense-count {
+  font-weight: 700;
+  color: #fff;
+}
+
+.ban-warning {
+  color: #f87171;
+  font-size: 0.8rem;
+  margin-left: 6px;
+}
+
+.status-active {
+  color: #86efac;
+  font-weight: 600;
+}
+
+.status-banned {
+  color: #f87171;
+  font-weight: 600;
+}

@@ -1,0 +1,67 @@
+.logs-page {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.logs-count {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.message-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge.high {
+  background: #3d1515;
+  color: #f87171;
+}
+
+.badge.medium {
+  background: #3d2e10;
+  color: #fbbf24;
+}
+
+.badge.low {
+  background: #1a2e1a;
+  color: #86efac;
+}
+
+.badge.deleted {
+  background: #3d1515;
+  color: #f87171;
+}
+
+.badge.flagged {
+  background: #3d2e10;
+  color: #fbbf24;
+}
+
+.badge.logged {
+  background: #1a1a2e;
+  color: #93c5fd;
+}

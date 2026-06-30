@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ModerationLog } from "../types/moderation";
+import "../styles/logs.css";
 
 function Logs() {
   const [logs, setLogs] = useState<ModerationLog[]>([]);
@@ -37,17 +38,16 @@ function Logs() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className="logs-page">
       <h1>Moderation Logs</h1>
 
-      <div>
+      <div className="filters">
         <input
           type="text"
           placeholder="Search by username or message..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
@@ -58,7 +58,6 @@ function Logs() {
           <option value="spam">Spam</option>
           <option value="nsfw">NSFW</option>
         </select>
-
         <select
           value={severityFilter}
           onChange={(e) => setSeverityFilter(e.target.value)}
@@ -70,36 +69,44 @@ function Logs() {
         </select>
       </div>
 
-      <p>
+      <p className="logs-count">
         Showing {filtered.length} of {logs.length} logs
       </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Message</th>
-            <th>Category</th>
-            <th>Severity</th>
-            <th>Reason</th>
-            <th>Action</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map((log) => (
-            <tr key={log.id}>
-              <td>{log.username}</td>
-              <td>{log.message}</td>
-              <td>{log.category}</td>
-              <td>{log.severity}</td>
-              <td>{log.reason}</td>
-              <td>{log.action}</td>
-              <td>{new Date(log.createdAt).toLocaleString()}</td>
+      <div className="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Message</th>
+              <th>Category</th>
+              <th>Severity</th>
+              <th>Reason</th>
+              <th>Action</th>
+              <th>Time</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filtered.map((log) => (
+              <tr key={log.id}>
+                <td>{log.username}</td>
+                <td className="message-cell">{log.message}</td>
+                <td>{log.category.replace("_", " ")}</td>
+                <td>
+                  <span className={`badge ${log.severity}`}>
+                    {log.severity}
+                  </span>
+                </td>
+                <td>{log.reason}</td>
+                <td>
+                  <span className={`badge ${log.action}`}>{log.action}</span>
+                </td>
+                <td>{new Date(log.createdAt).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

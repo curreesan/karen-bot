@@ -1,0 +1,47 @@
+nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 32px;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+  margin-right: 16px;
+}
+
+nav a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #fff;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-user {
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+.btn-logout {
+  background-color: #ed4245;
+  color: #fff;
+}
+
+.btn-logout:hover {
+  background-color: #c03537;
+}

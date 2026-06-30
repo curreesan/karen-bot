@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Offense } from "../types/moderation";
+import "../styles/offenders.css";
 
 function Offenders() {
   const [offenses, setOffenses] = useState<Offense[]>([]);
@@ -28,17 +29,19 @@ function Offenders() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className="offenders-page">
       <h1>Offenders</h1>
 
-      <input
-        type="text"
-        placeholder="Search by username..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className="offenders-search">
+        <input
+          type="text"
+          placeholder="Search by username..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-      <p>
+      <p className="offenders-count">
         Showing {filtered.length} of {offenses.length} offenders
       </p>
 
@@ -48,7 +51,7 @@ function Offenders() {
             <th>Username</th>
             <th>Offense Count</th>
             <th>Last Offense</th>
-            <th>Ban Status</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -56,10 +59,19 @@ function Offenders() {
             <tr key={o.id}>
               <td>{o.username}</td>
               <td>
-                {o.count} {o.count >= 15 ? "🚨 Ban threshold reached" : ""}
+                <span className="offense-count">{o.count}</span>
+                {o.count >= 15 && (
+                  <span className="ban-warning">🚨 Ban threshold reached</span>
+                )}
               </td>
               <td>{new Date(o.lastOffenseAt).toLocaleString()}</td>
-              <td>{o.isBanned ? "🔴 Banned" : "🟢 Active"}</td>
+              <td>
+                {o.isBanned ? (
+                  <span className="status-banned">🔴 Banned</span>
+                ) : (
+                  <span className="status-active">🟢 Active</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
