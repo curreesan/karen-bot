@@ -3,6 +3,7 @@ dotenv.config({ path: "../.env" });
 
 import express from "express";
 import cors from "cors";
+import path from "path";
 import { logsRouter } from "./routes/logRoutes";
 import { authRouter } from "./routes/authRoutes";
 
@@ -16,6 +17,8 @@ app.use(
   }),
 );
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/logs", logsRouter);

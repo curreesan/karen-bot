@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karen Moderation API</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f9f9f8;
+        color: #1a1a1a;
+        padding: 3rem 1.5rem;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .version {
+        font-size: 12px;
+        color: #888;
+        font-family: monospace;
+        margin-bottom: 2.5rem;
+      }
+
+      .section {
+        margin-bottom: 2rem;
+      }
+
+      .section-label {
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #888;
+        margin-bottom: 8px;
+      }
+
+      .route {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        padding: 7px 0;
+        border-bottom: 1px solid #ebebeb;
+      }
+
+      .route:last-child {
+        border-bottom: none;
+      }
+
+      .method {
+        font-family: monospace;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 44px;
+      }
+
+      .get {
+        color: #0f6e56;
+      }
+      .post {
+        color: #185fa5;
+      }
+      .put {
+        color: #ba7517;
+      }
+      .delete {
+        color: #a32d2d;
+      }
+
+      .path {
+        font-family: monospace;
+        font-size: 12px;
+        color: #1a1a1a;
+        min-width: 240px;
+      }
+
+      .desc {
+        font-size: 12px;
+        color: #888;
+      }
+
+      .footer {
+        margin-top: 2.5rem;
+        font-size: 12px;
+        color: #888;
+      }
+
+      .footer a {
+        color: #185fa5;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 480px) {
+        .route {
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        .desc {
+          width: 100%;
+          padding-left: 56px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>👮 Karen Moderation API</h1>
+      <div class="version">v1.0.0</div>
+
+      <div class="section">
+        <div class="section-label">Auth</div>
+        <div class="route">
+          <span class="method get">GET</span>
+          <span class="path">/api/auth/login</span>
+          <span class="desc">Redirect to Discord OAuth</span>
+        </div>
+        <div class="route">
+          <span class="method get">GET</span>
+          <span class="path">/api/auth/callback</span>
+          <span class="desc">Discord OAuth callback, issues JWT</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Moderation Logs</div>
+        <div class="route">
+          <span class="method post">POST</span>
+          <span class="path">/api/logs</span>
+          <span class="desc">Save a moderation action from the bot</span>
+        </div>
+        <div class="route">
+          <span class="method get">GET</span>
+          <span class="path">/api/logs</span>
+          <span class="desc">Get all moderation logs</span>
+        </div>
+        <div class="route">
+          <span class="method get">GET</span>
+          <span class="path">/api/logs/offenses</span>
+          <span class="desc">Get offense counts per user</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Health</div>
+        <div class="route">
+          <span class="method get">GET</span>
+          <span class="path">/health</span>
+          <span class="desc">Server status check</span>
+        </div>
+      </div>
+
+      <div class="footer">
+        Discord bot uses a locally-run LLM (Ollama / Llama 3.2) for AI
+        moderation. Dashboard:
+        <a href="https://karen-bot-client.vercel.app" target="_blank"
+          >karen-bot-client.vercel.app</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
