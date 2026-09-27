@@ -1,9 +1,9 @@
-import { Client, GatewayIntentBits, Message, TextChannel } from "discord.js";
 import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
+
+import { Client, GatewayIntentBits, Message, TextChannel } from "discord.js";
 import { analyzeMessage } from "./services/moderator";
 import { saveModerationLog } from "./services/api";
-
-dotenv.config({ path: "../.env" });
 
 const client = new Client({
   intents: [

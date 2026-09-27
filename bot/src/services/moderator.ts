@@ -1,12 +1,11 @@
 import OpenAI from "openai";
-import dotenv from "dotenv";
-
-dotenv.config({ path: "../../.env" });
 
 const openai = new OpenAI({
-  apiKey: "ollama",
-  baseURL: process.env.OLLAMA_URL || "http://localhost:11434/v1",
+  apiKey: process.env.CLOUDFLARE_API_TOKEN,
+  baseURL: `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/v1`,
 });
+
+const MODEL = process.env.AI_MODEL || "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 
 export type ModerationResult = {
   isToxic: boolean;
@@ -93,7 +92,7 @@ export async function analyzeMessage(
   content: string,
 ): Promise<ModerationResult> {
   const response = await openai.chat.completions.create({
-    model: "llama3.2",
+    model: MODEL,
     messages: [
       {
         role: "system",

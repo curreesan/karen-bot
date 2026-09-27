@@ -5,7 +5,7 @@ Karen is an intelligent Discord moderation system that uses AI to detect and act
 🔗 **Live Dashboard:** [karen-bot-client.vercel.app](https://karen-bot-client.vercel.app)
 🔗 **Live API:** [karen-bot-server.onrender.com](https://karen-bot-server.onrender.com)
 
-> Note: The Discord bot's AI moderation runs on a local LLM (Ollama + Llama 3.2), so live message moderation is only active when the bot is running locally. The dashboard and API are fully live and browsable at all times.
+> Note: The Discord bot's AI moderation runs on Cloudflare Workers AI (Llama 3.3 70B), so it doesn't depend on a local model and can run wherever the bot is hosted. The dashboard and API are fully live and browsable at all times.
 
 ## Overview
 
@@ -16,7 +16,7 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 ## Features
 
 - **Real-time message monitoring** across Discord servers via Discord.js
-- **AI-based content analysis** using a locally-run LLM (Ollama running Llama 3.2), with a structured system prompt covering hate speech, harassment, spam, and NSFW detection
+- **AI-based content analysis** using Cloudflare Workers AI (Llama 3.3 70B), with a structured system prompt covering hate speech, harassment, spam, and NSFW detection
 - **Severity-based moderation actions**
   - High severity → message deleted, user warned
   - Medium severity → message flagged to the moderator role
@@ -32,7 +32,7 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 
 - Node.js, TypeScript
 - Discord.js
-- Ollama (Llama 3.2) for local, free AI inference
+- Cloudflare Workers AI (Llama 3.3 70B) for content moderation inference
 
 **Backend**
 
@@ -56,7 +56,7 @@ Every moderation decision is logged to a database, and repeat offenders are trac
 ## How It Works
 
 1. A message is sent in a connected Discord server.
-2. The bot sends the message content to a local Llama 3.2 model via Ollama, using a detailed moderation prompt covering categories, severity rules, and edge cases (coded language, bypass attempts, self-harm content, etc.).
+2. The bot sends the message content to a Llama 3.3 70B model via Cloudflare Workers AI, using a detailed moderation prompt covering categories, severity rules, and edge cases (coded language, bypass attempts, self-harm content, etc.).
 3. Based on the AI's classification, the bot takes action: delete + warn, flag to moderators, or silently log.
 4. The result is sent to the live Express API and saved to PostgreSQL, along with an updated offense count for the user.
 5. The server broadcasts the new moderation event over a WebSocket connection, so any moderator with the dashboard open sees it appear instantly — no page refresh required.
