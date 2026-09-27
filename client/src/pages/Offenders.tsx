@@ -1,9 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import type { Offense } from "../types/moderation";
 import { socket } from "../lib/socket";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/offenders.css";
 
 function Offenders() {
+  const { token } = useAuth();
   const [offenses, setOffenses] = useState<Offense[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -12,7 +14,9 @@ function Offenders() {
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/logs/offenses`,
+        { headers: { Authorization: `Bearer ${token}` } },
       );
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
       const data = await res.json();
       setOffenses(data);
     } catch (err) {
@@ -20,7 +24,7 @@ function Offenders() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     fetchOffenses();

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import type { ModerationLog, Offense } from "../types/moderation";
 import { socket } from "../lib/socket";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/dashboard.css";
 
 function Dashboard() {
+  const { token } = useAuth();
   const [logs, setLogs] = useState<ModerationLog[]>([]);
   const [offenses, setOffenses] = useState<Offense[]>([]);
   const [loading, setLoading] = useState(true);
@@ -11,10 +13,18 @@ function Dashboard() {
   useEffect(() => {
     async function fetchData() {
       try {
+        const authHeaders = { Authorization: `Bearer ${token}` };
         const [logsRes, offensesRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL}/api/logs`),
-          fetch(`${import.meta.env.VITE_API_URL}/api/logs/offenses`),
+          fetch(`${import.meta.env.VITE_API_URL}/api/logs`, {
+            headers: authHeaders,
+          }),
+          fetch(`${import.meta.env.VITE_API_URL}/api/logs/offenses`, {
+            headers: authHeaders,
+          }),
         ]);
+        if (!logsRes.ok || !offensesRes.ok) {
+          throw new Error("Request failed");
+        }
         const logsData = await logsRes.json();
         const offensesData = await offensesRes.json();
         setLogs(logsData);
@@ -36,7 +46,7 @@ function Dashboard() {
     return () => {
       socket.off("new_log", handleNewLog);
     };
-  }, []);
+  }, [token]);
 
   if (loading) return <div>Loading...</div>;
 

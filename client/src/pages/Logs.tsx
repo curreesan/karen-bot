@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import type { ModerationLog } from "../types/moderation";
 import { socket } from "../lib/socket";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/logs.css";
 
 function Logs() {
+  const { token } = useAuth();
   const [logs, setLogs] = useState<ModerationLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -13,7 +15,10 @@ function Logs() {
   useEffect(() => {
     async function fetchLogs() {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/logs`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/logs`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         const data = await res.json();
         setLogs(data);
       } catch (err) {
@@ -33,7 +38,7 @@ function Logs() {
     return () => {
       socket.off("new_log", handleNewLog);
     };
-  }, []);
+  }, [token]);
 
   const filtered = logs.filter((log) => {
     const matchesSearch =

@@ -14,7 +14,10 @@ async function saveModerationLog(
   try {
     await fetch(`${API_URL}/api/logs`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-bot-key": process.env.BOT_API_KEY || "",
+      },
       body: JSON.stringify({
         discordId,
         username,
