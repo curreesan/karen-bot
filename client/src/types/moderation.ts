@@ -18,5 +18,5 @@ export type Offense = {
   username: string;
   count: number;
   lastOffenseAt: string;
-  isBanned: boolean;
+  shouldBeBanned: boolean;
 };

@@ -1,6 +1,8 @@
 import { db } from "../db";
 import { moderationLogs, offenses } from "../db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
+
+const BAN_THRESHOLD = 15;
 
 async function insertLog(data: {
   discordId: string;
@@ -17,20 +19,21 @@ async function insertLog(data: {
 }
 
 async function upsertOffense(discordId: string, username: string) {
-  const existing = await db.query.offenses.findFirst({
-    where: eq(offenses.discordId, discordId),
-  });
+  const [updated] = await db
+    .update(offenses)
+    .set({
+      count: sql`${offenses.count} + 1`,
+      lastOffenseAt: new Date(),
+      username,
+      shouldBeBanned: sql`(${offenses.count} + 1) >= ${BAN_THRESHOLD}`,
+    })
+    .where(eq(offenses.discordId, discordId))
+    .returning({ count: offenses.count });
 
-  if (existing) {
-    await db
-      .update(offenses)
-      .set({ count: existing.count + 1, lastOffenseAt: new Date(), username })
-      .where(eq(offenses.discordId, discordId));
-    return existing.count + 1;
-  } else {
-    await db.insert(offenses).values({ discordId, username, count: 1 });
-    return 1;
-  }
+  if (updated) return updated.count;
+
+  await db.insert(offenses).values({ discordId, username, count: 1 });
+  return 1;
 }
 
 async function getAllLogs() {

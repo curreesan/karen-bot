@@ -35,5 +35,5 @@ export const offenses = pgTable("offenses", {
   username: text("username").notNull(),
   count: integer("count").notNull().default(0),
   lastOffenseAt: timestamp("last_offense_at").defaultNow(),
-  isBanned: boolean("is_banned").notNull().default(false),
+  shouldBeBanned: boolean("is_banned").notNull().default(false),
 });
